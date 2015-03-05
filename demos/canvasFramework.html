@@ -1,0 +1,149 @@
+<!-- canvasFramework.html -->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<!-- 
+		<script src="_ANIMATER.js"></script>
+		<script src="_MC.js"></script>
+		<script src="_D2.js"></script>
+		<script src="_SHAPE.js"></script>
+		<script src="_INHERIT_D2.js"></script>
+		<script src="_STYLE.js"></script>
+		 -->
+		 <script src="../release/cquery-0.1.0.js"></script>
+
+		<script>
+		//
+		//添加以及获取
+		//mc.polygon(num,config{posi,fill,stroke,opcity,innerImage})
+		//mc.arc(r,config)
+		//mc.path([](func),config{posi,ifclose,fill,stroke,opcity})
+		//mc.img(path,config{})
+		//mc.curve(4args ,6args ,config{})
+		//mc.text(String,config)
+		//mc.id()
+		//mc.class()
+		//mc.type(Shape,path,Image)
+		//元素的公共方法
+		//domc.bind(type ,func);
+		//domc.unbind(type ,func);
+		//domc.posi(x,y);with args or without;
+		//domc.rotate(offset(this.center) ,deg);as above
+		//domc.scale(x,y);as above
+		//domc.opcity(num);
+		//domc.ani.posi(x,y);
+		//domc.delay(time).animate({},func,time)
+		//rotate(offset ,deg);
+		//scale(x,y);
+		//opcity(num);
+		//样式们
+		//color.set();
+		//fill.set();
+		//stroke.set();
+		//transform.set();
+		//filter.set();
+
+		//z-index fell
+		window.onload = function () {
+			var canvas = document.getElementById("canvas");
+			var c = canvas.getContext("2d");
+			var mc = new MC(canvas ,c);	
+			var rect = mc.polygon(4,100,{
+				posi:[225,225],
+				rotate:30,
+				stroke:"red",
+				fill:"blue",
+				line:{
+					width:10
+				},
+				index : 1
+			})
+			var rect2 = mc.polygon(8,100,{
+				posi:[275,275],
+				rotate:-30,
+				stroke:"blue",
+				fill:"red",
+				line:{
+					width:10
+				}
+			})
+			rect.draw();
+			rect2.draw();
+			rect.bind("click",function(){
+				console.log("event 1");
+			})
+			rect.bind("click",function(){
+				console.log("event 2");
+			})
+			rect2.bind("click",function(){
+				console.log("event 2-1");
+			})
+			rect2.bind("click",function(){
+				console.log("event 2-2");
+			})
+
+			var rectagle = mc.rect(100,200,{
+				posi:[10,10],
+				stroke:"green"
+			})
+			rectagle.draw();
+
+			var ar = mc.arc(50,0,60,false,{
+				posi:[50,50],
+				stroke:"pink"
+			})
+			ar.draw();
+
+			var path = mc.path(function(){
+				return [[0,0],[100,100],[50,100]];
+			},true,{
+				posi:[50,50],
+				stroke:"blue"
+			})
+			path.draw();
+
+
+			var curve = mc.curve([0,0,100,100,200,0],{
+				posi:[0,100],
+				stroke:"red",
+				line:{
+					width:5
+				}
+			})
+			curve.draw();
+
+			var text = mc.text("cquery" ,22 ,"微软雅黑" ,"fill" ,"bottom" ,"left",{
+				posi:[200,100]
+			});
+			text.draw();
+			var img = mc.img("head.png" ,100 ,100,{
+				posi:[200,200],
+				stroke:"red",
+				line:{
+					width:5
+				}
+			});
+			img.draw();
+
+			var img2 = mc.img("head.png" ,100 ,100,{
+				posi:[400,400],
+				stroke:"red",
+				line:{
+					width:5
+				}
+			});
+			img2.draw();
+		}
+
+		
+		
+		
+		
+		</script>
+	</head>
+	<body>
+		<canvas height="500" width="500" id="canvas"></canvas>
+		<img src="head.png" id="img" hidden>
+	</body>
+</html>

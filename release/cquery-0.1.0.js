@@ -1,5 +1,5 @@
-***********************************************************
-***********************************************************
+/*! cquery0.1.0 2014-12-04 */
+// _MC.js
 
 /**  
 * @fileOverview
@@ -45,7 +45,7 @@
 		</ul>
 	</li>
 </ul>
-* @author {@link https:***********************************************************
+* @author {@link https://github.com/shaomingquan|shaomingquan} 
 * @version 0.1.0
 */
 
@@ -61,7 +61,7 @@
 
 
 function MC(canvas){
-	***********************************************************
+	//maintain shapes
 	/**
 	* @memberof MC
 	* @instance
@@ -70,7 +70,7 @@ function MC(canvas){
 	*/
 	this.shapes = [];
 
-	***********************************************************
+	//maintain typeof shapes
 	this.polygons = [];
 	this.arcs = [];
 	this.paths = [];
@@ -78,19 +78,19 @@ function MC(canvas){
 	this.curves = [];
 	this.texts = [];
 
-	***********************************************************
+	//maintain these to get by id or class
 	this.ids = {};
 	this.classes = [];
 
-	***********************************************************
+	//maintain shape detail
 	this.events = {};
 	this.events.click = {};
 
-	***********************************************************
+	//maintain resourse like image
 	this.resourse = {};
 	this.resourse.imgs = {};
 
-	***********************************************************
+	//draw enviroment
 	this.canvas = canvas;
 	this.c = this.canvas.getContext("2d");
 	console.log(this.c)
@@ -304,31 +304,31 @@ MC.prototype.removeEvent = function (shapeId ,what) {
 		this.canvas.removeEvent(this.canvas ,what ,events[x]);
 	}
 };
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
+// _D2.js
+// configDemo = {
+// 	posi:{
+// 		x , y 
+// 	},
+// 	offset:{}
+// 	rotate:{deg},
+// 	scale:{x,y},
+// 	opcity:
+// 	stroke:{
+// 		style
+// 	},
+// 	fill:{
+// 		style
+// 	},
+// 	shadow:{
+// 		color,
+// 		blur,
+// 		offsetX,
+// 		offsetY
+// 	},
+// 	line:{
 
-***********************************************************
-***********************************************************
+// 	}
+// }
 /**  
 * @author shaomingquan  
 * @constructor twoDimension  
@@ -348,11 +348,11 @@ function twoDimension(MC ,canvas , c, config ,info){
 	this.MC = MC;
 	this.canvas = canvas ;
 	this.c = c;
-	***********************************************************
-	***********************************************************
-	***********************************************************
-	***********************************************************
-	***********************************************************
+	// this.posi = [0,0];
+	// this.offset = [0,0];
+	// this.scale = [1,1];
+	// this.rotate = 0
+	// this.opcity = 255;
 	this.posi = [0,0];
 	this.animator = new Animator();
 	this.anis = [];
@@ -472,7 +472,7 @@ twoDimension.prototype.alterCallback = function ( duration ,aniFunc ,callback){
 			if(!animator.isEmpty()){
 				(animator.dequeue())();
 			}else{
-				animator.started = true;			
+				animator.started = false;
 			}
 		}
 	}
@@ -487,9 +487,11 @@ twoDimension.prototype.stop = function(){
 	var length = this.anis.length,
 		anis = this.anis;
 	for(var i = 0 ; i < length ; i++){
-		anis[i].stop();
+		anis[i].stop(this);
 	}
 	this.animator.dequeue();
+	this.animator.started = false;
+	return this;
 }
 /**
 *@memberof twoDimension
@@ -630,7 +632,7 @@ twoDimension.prototype.drawProcessing = function(callback ,redrawFlag) {
 	return true;
 };
 
-***********************************************************
+// _SHAPE.js
 Math.SIN = function (deg) {
 	return Math.sin(deg/360*Math.PI*2);
 }
@@ -894,7 +896,7 @@ text.prototype.draw = function(ifRedraw) {
 	}
 	return this;
 };
-***********************************************************
+// _INHERIT_D2.js
 (function(){
 	for(func in twoDimension.prototype){
 		console.log(func);
@@ -999,14 +1001,24 @@ Animator.Fx.prototype = {
 		elem.MC.drawAll();
 	},
 
-	stop : function(){
+	stop : function(MC){
 		var fxs = Animator.Fx.fxs,
-			length = fxs.length
+			length = fxs.length,
+			anis = MC ? MC.anis : null,
+			aniLength = anis ? anis.length : 0;
 		for ( var i = length - 1; i >= 0; i--){
 			if (fxs[i] === this){
 				fxs.splice(i, 1);
+				break;
 			}
 		}
+		if(!!aniLength)
+			for( var i = aniLength - 1 ; i >=0 ; i --){
+				if(anis[i] == this){
+					anis.splice(i,1);
+					break;
+				}
+			}
 	}
 	
 }
@@ -1053,7 +1065,7 @@ Number.prototype.greaterThan = function(target){
 }
 
 Animator.Fx.dichotomyGetT = function(x ,ax ,bx ,cx ,leftVal ,rightVal){
-	***********************************************************
+	//x = ((ax * t + bx) * t + cx ) * t
 	var mVal = (leftVal + rightVal)/2,
 		lx = Animator.Fx.xTfunc(ax ,bx ,cx ,leftVal);
 		rx = Animator.Fx.xTfunc(ax ,bx ,cx ,rightVal);
@@ -1110,4 +1122,4 @@ Animator.Fx.tick = function(){
 
 };
 
-***********************************************************
+// _STYLE.js

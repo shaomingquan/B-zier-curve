@@ -1,0 +1,65 @@
+<!-- canvasFramework.html -->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<!-- 
+		<script src="_MC.js"></script>
+		<script src="_D2.js"></script>
+		<script src="_SHAPE.js"></script>
+		<script src="_INHERIT_D2.js"></script>
+		<script src="_ANIMATER.js"></script>
+		<script src="_STYLE.js"></script>
+		 -->
+		 <script src="../release/cquery-0.1.0.js"></script>
+
+		<script>
+		
+		window.onload = function () {
+			var canvas = document.getElementById("canvas");
+			var mc = new MC(canvas);	
+			rect = mc.polygon(4,100,{
+				posi:[225,225],
+				rotate:30,
+				stroke:"red",
+				fill:"blue",
+				line:{
+					width:10
+				},
+				index : 1
+			});
+			var rect2 = mc.polygon(8,100,{
+				posi:[275,275],
+				scale:[2,1],
+				rotate:-30,
+				stroke:"blue",
+				fill:"red",
+				line:{
+					width:10
+				}
+			});
+			rect2.draw();
+			rect.draw();
+
+			rect.ani({posi:[100,100] ,rotate:210}, 1000, [0.2,0.6,0.6,0.2])
+			.ani({posi:[200,100] ,rotate:30}, 1000, "linear");
+
+			rect2.ani({posi:[400,400] ,scale:[2,2],rotate:180},2000,"linear");
+
+		}
+			function aaa(){
+				rect.stop();
+			}
+
+		
+		
+		
+		
+		</script>
+	</head>
+	<body>
+		<canvas height="500" width="500" id="canvas"></canvas>
+		<img src="head.png" id="img" hidden>
+		<input type="button" value="stop rect" onclick="aaa()" />
+	</body>
+</html>

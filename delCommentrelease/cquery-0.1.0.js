@@ -1,102 +1,30 @@
-***********************************************************
-***********************************************************
 
-/**  
-* @fileOverview
-<ul>
-	<li>
-		<b>general introduce:</b>
-		<ul>
-			<li>I fell that it is fussy for canvas programming to invoke save and restore function</li>
-			<li>So i write this totally a little less than 1000 lines</li>
-			<li>It is simple now, i will make it better soon</li>
-			<li>It may has some short-comings, welcome to give advice to me</li>
-			<li>Welcome to contribute to it</li>
-		</ul>
-	</li>
-	<li>
-		<b>tips:</b>
-		<ul>
-			<li>
-				<b>explain a argument called <i>config</i>:</b>
-				<ul>
-					<li><b>posi:</b>{x:double,y:double}</li>
-					<li><b>offset:</b>{x:double,y:double}</li>
-					<li><b>scale:</b>{x:double,y:double}</li>
-					<li><b>rotate:</b>double(0~INFINITY)</li>
-					<li><b>stroke:</b>string | Style</li>
-					<li><b>fill:</b>string| Style</li>
-					<li><b>opcity:</b>double(0~1)</li>
-					<li><b>line:</b>{width:int,cap:string,join:string}</li>
-					<li><b>shadow:</b>Array(length === 4)</li>
-				</ul>
-			</li>
-			<li>
-				thanks for <b>John Resig</b> author of jquery, the <b>chain operation</b> and the animation is learn by reading jquery source code
-			</li>
-		</ul>
-	</li>
-	<li>
-		<b>later for next version:</b>
-		<ul>
-			<li>improve current methods</li>
-			<li>add event methods</li>
-			<li>add 3D shapes</li>
-		</ul>
-	</li>
-</ul>
-* @author {@link https:***********************************************************
-* @version 0.1.0
-*/
-
-/**  
-* @author shaomingquan  
-* @constructor MC  
-* @class MC
-* @description main class of the cquery, one HTMLCanvasElement has only one MC object ,there are some methods provided by MC to darw shapes and make the shape do animation and stop    
-* @example new MC(document.getElementById("canvasId")); 
-* @type MC
-* @param {HTMLCanvasElement} canvas your canvas object in dom  
-*/  
-
-
+  
 function MC(canvas){
-	***********************************************************
-	/**
-	* @memberof MC
-	* @instance
-	* @type Array(D2)
-	* @description collection of D2 shapes in this MC
-	*/
+	
+	
 	this.shapes = [];
-
-	***********************************************************
+	
 	this.polygons = [];
 	this.arcs = [];
 	this.paths = [];
 	this.imgs = [];
 	this.curves = [];
 	this.texts = [];
-
-	***********************************************************
+	
 	this.ids = {};
 	this.classes = [];
-
-	***********************************************************
+	
 	this.events = {};
 	this.events.click = {};
-
-	***********************************************************
+	
 	this.resourse = {};
 	this.resourse.imgs = {};
-
-	***********************************************************
+	
 	this.canvas = canvas;
 	this.c = this.canvas.getContext("2d");
 	console.log(this.c)
-
 }
-
 MC.prototype.drawAll = function (){
 	var shapes = this.shapes,
 		length = shapes.length,
@@ -117,155 +45,46 @@ MC.prototype.drawAll = function (){
 		shapesTemp[index].draw("memeda");
 	}
 } 
-/**
-* @method polygon
-* @memberof MC
-* @instance
-* @param {int} number_of_side the number of polygon sides
-* @param {double} r distance between center of the shape and any point on the polygon
-* @param {json} config config of shape 
-* @type polygon
-*/
 MC.prototype.polygon = function (num_of_side, r ,config){
 	return new polygon(num_of_side ,r ,this ,this.canvas , this.c, config);
 }
-/**
-* @method rect
-* @memberof MC
-* @instance
-* @param {double} width width of the rectagle 
-* @param {double} height height of the rectagle
-* @param {json} config config of shape 
-* @type rect
-*/
 MC.prototype.rect = function (width ,height ,config){
 	return new rect(width ,height ,this ,this.canvas ,this.c, config);
 }
-/**
-* @method arc
-* @memberof MC
-* @instance
-* @param {double} r radius of the arc 
-* @param {double} startAngle startAngle of the arc
-* @param {double} endAngle engAngle of the arc
-* @param {boolean} mode direction of drawing arc, true for clockwise, false for anticlockwise
-* @param {json} config config of shape 
-* @type arc
-*/
 MC.prototype.arc = function (r ,startAngle ,endAngle ,mode ,config){
 	return new arc(r ,startAngle ,endAngle ,mode ,this ,this.canvas ,this.c ,config);
 }
-/**
-* @method path
-* @memberof MC
-* @instance
-* @param {Array} pathData points of the shape, the points will link together order by the index in the pathData Array 
-* @param {boolean} isClose true for close the path, false for not
-* @param {json} config config of shape 
-* @type path
-*/
 MC.prototype.path = function(pathData ,isClose ,config){
 	return new path(pathData ,isClose ,this ,this.canvas ,this.c ,config);
 }
-/**
-* @method path
-* @memberof MC
-* @instance
-* @param {string} url url of the image 
-* @param {double} width width of the image 
-* @param {double} height height of the image 
-* @param {json} config config of shape
-* @type curve 
-*/
 MC.prototype.img = function(url ,width ,height ,config){
 	return new img(url ,width ,height ,this ,this.canvas ,this.c ,config);
 }
-/**
-* @method curve
-* @memberof MC
-* @instance
-* @param {Array} points control points of curve, a pairs for Two Bessel curve, two for Three Bessel curve
-* @param {json} config config of shape 
-* @type curve
-*/
 MC.prototype.curve = function(points,config){
 	return new curve(points ,this ,this.canvas ,this.c ,config);
 }
-/**
-* @method text
-* @memberof MC
-* @instance
-* @param {string} content the content of the text
-* @param {int} font-size of the text
-* @param {string} font-family of the text
-* @param {string} mode of the text
-* @param {string} textAlign of the text
-* @param {string} textBaseline of the text
-* @param {json} config config of shape 
-* @type text
-*/
 MC.prototype.text = function(content ,fontSize ,fontFamily ,mode ,H ,V ,config){
 	return new text(content ,fontSize ,fontFamily ,mode ,H ,V ,this ,this.canvas ,this.c ,config);
 }
-
-/**
-* @method get2DsByClass
-* @memberof MC
-* @instance
-* @param {string} id of shape you want
-* @type twoDimension
-*/
 MC.prototype.get2DById = function(id){
 	return this.ids[id];
 }
-
-/**
-* @method get2DsByClass
-* @memberof MC
-* @instance
-* @param {string} class of shape you want
-* @type Array(twoDimension)
-*/
 MC.prototype.get2DsByClass = function(classname){
 	return this.classes[classname];
 }
-
-/**
-* @method get2DByName
-* @memberof MC
-* @instance
-* @param {string} name type of shape you want
-* @type Array(twoDimension)
-*/
 MC.prototype.get2DByName = function(name){
 	return this[name];
 }
-
-/**
-* @method width
-* @memberof MC
-* @instance
-* @type int
-*/
 MC.prototype.width = function(){
 	return this.canvas.width();
 }
-
-/**
-* @method height
-* @memberof MC
-* @instance
-* @type int
-*/
 MC.prototype.height = function(){
 	return this.canvas.height();
 }
-
 MC.prototype.delay = function ( time ) {
 	var now = new Date().valueOf();
 	while(new Date().valueOf() - now < time);
 }
-
 HTMLCanvasElement.prototype.addEvent = function(who , what , func){		
 	if(who.attachEvent){
 		who.attachEvent('on'+what , func);
@@ -273,7 +92,6 @@ HTMLCanvasElement.prototype.addEvent = function(who , what , func){
 		who.addEventListener(what , func ,false);
 	}
 }
-
 HTMLCanvasElement.prototype.removeEvent = function(who , what , func){
 	if(who.detachEvent){
 		who.detachEvent('on'+what , func)
@@ -281,12 +99,10 @@ HTMLCanvasElement.prototype.removeEvent = function(who , what , func){
 		who.removeEventListener(what ,func);
 	}
 }
-
 MC.prototype.addEvent = function (shapeId ,what ,callback) {
 	var time = 0,
 		canvas = this.canvas,
 		events = this.events[what][shapeId+""] = this.events[what][shapeId+""] || {};
-
 	this.delay(1);
 	eval("events.event"+(time = new Date().valueOf())+"=null");
 	events["event"+time] = function(e){
@@ -295,78 +111,34 @@ MC.prototype.addEvent = function (shapeId ,what ,callback) {
 	}
 	canvas.addEvent(canvas ,"click" ,events["event"+time] );
 }
-
 MC.prototype.removeEvent = function (shapeId ,what) {
 	var events = this.events[what][shapeId],
 		what = what;
-
 	for(x in events) {
 		this.canvas.removeEvent(this.canvas ,what ,events[x]);
 	}
 };
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-***********************************************************
-
-***********************************************************
-***********************************************************
-/**  
-* @author shaomingquan  
-* @constructor twoDimension  
-* @class 2D
-* @pravite
-* @description subclass of specific shape
-* @type twoDimension 
-* @param {MC} MC what the shape belong to
-* @param {HTMLCanvasElement} canvas your canvas
-* @param {CanvasRenderingContext2D} c CanvasRenderingContext2D of canvas
-* @param {json} config shape config
-* @param {json} info shape info
-*/  
-
+  
 function twoDimension(MC ,canvas , c, config ,info){
 	this.display = "hidden";
 	this.MC = MC;
 	this.canvas = canvas ;
 	this.c = c;
-	***********************************************************
-	***********************************************************
-	***********************************************************
-	***********************************************************
-	***********************************************************
+	
+	
+	
+	
+	
 	this.posi = [0,0];
 	this.animator = new Animator();
 	this.anis = [];
-
 	this.MC.delay(1);
 	this.shapeId = new Date().valueOf();
-
 	var MCIds = MC.ids,
 		MCClasses = MC.classes,
 		MCIdLength = MCIds.length,
 		index = 0;
-
 	this.MC.shapes.push(this);
-
 	switch(this.constructor){
 		case polygon : {
 			this.MC["polygons"].push(this);
@@ -388,7 +160,6 @@ function twoDimension(MC ,canvas , c, config ,info){
 			break;
 		}
 	}
-
 	if(config)
 		tranConfig : for(attr in config){
 			this[attr] = config[attr];
@@ -418,16 +189,6 @@ function twoDimension(MC ,canvas , c, config ,info){
 			this[attr] = info[attr];
 		}
 }
-/**
-*@method ani
-*@memberof twoDimension
-*@instance
-*@param {json} target property, the same format as config of shape
-*@param {int} time during transition
-*@param {string | Array} aniFunc animation function, string for specific method, Array for Three Bessel curve
-*@param {Function} execute when corresponding animation is over
-*@type twoDimension
-*/
 twoDimension.prototype.ani = function(property, duration, aniFunc, callback){
 	var animator = this.animator,
 		_this = this,
@@ -461,7 +222,6 @@ twoDimension.prototype.ani = function(property, duration, aniFunc, callback){
 	animator.enqueue(curFunc);
 	return this;
 }
-
 twoDimension.prototype.alterCallback = function ( duration ,aniFunc ,callback){
 	return {
 		duration : duration,
@@ -472,33 +232,21 @@ twoDimension.prototype.alterCallback = function ( duration ,aniFunc ,callback){
 			if(!animator.isEmpty()){
 				(animator.dequeue())();
 			}else{
-				animator.started = true;			
+				animator.started = false;
 			}
 		}
 	}
 }
-/**
-*@memberof twoDimension
-*@method stop
-*@instance
-*@type twoDimension
-*/
 twoDimension.prototype.stop = function(){
 	var length = this.anis.length,
 		anis = this.anis;
 	for(var i = 0 ; i < length ; i++){
-		anis[i].stop();
+		anis[i].stop(this);
 	}
 	this.animator.dequeue();
+	this.animator.started = false;
+	return this;
 }
-/**
-*@memberof twoDimension
-*@method bind
-*@instance
-*@param {string} type now only click
-*@param {Function} execute when corresponding event is trigger
-*@type twoDimension
-*/
 twoDimension.prototype.bind = function(type,callback) {
 	if(!callback){
 		console.error("where is your callback?");
@@ -523,14 +271,6 @@ twoDimension.prototype.bind = function(type,callback) {
 	return this;
 	
 }
-/**
-*@memberof twoDimension
-*@method bind
-*@instance
-*@param {string} type now only click
-*@param {Function} execute when corresponding event is removed
-*@type twoDimension
-*/
 twoDimension.prototype.unbind = function (type ,callback) {
 	this.MC.removeEvent(this.shapeId,type);
 	if(callback){
@@ -538,12 +278,6 @@ twoDimension.prototype.unbind = function (type ,callback) {
 	}
 	return this;
 }
-/**
-*@memberof twoDimension
-*@method hidden
-*@instance
-*@type twoDimension
-*/
 twoDimension.prototype.hidden = function(){
 	this.display = "hidden";
 	this.MC.drawAll();
@@ -552,13 +286,6 @@ twoDimension.prototype.hidden = function(){
 	}
 	return this;
 }
-
-/**
-*@memberof twoDimension
-*@method hidden
-*@instance
-*@type twoDimension
-*/
 twoDimension.prototype.show = function(){
 	this.display = "show";
 	this.MC.drawAll();
@@ -567,7 +294,6 @@ twoDimension.prototype.show = function(){
 	}
 	return this;
 }
-
 twoDimension.prototype.callbackRedraw = function(obj ,ifRedraw){
 	ifRedraw ? (function(arg0){
 		if(arg0 instanceof Function){
@@ -578,12 +304,9 @@ twoDimension.prototype.callbackRedraw = function(obj ,ifRedraw){
 		}
 	})(ifRedraw) : false;
 }
-
 twoDimension.prototype.drawProcessing = function(callback ,redrawFlag) {
-
 	this.c.save();
 	this.display = "show";
-
 	if(this.posi){					
 		this.c.translate(this.posi[0] || 0 ,this.posi[1] || 0);
 	}
@@ -613,7 +336,6 @@ twoDimension.prototype.drawProcessing = function(callback ,redrawFlag) {
 		this.c.lineCap = this.line.cap || null;
 		this.c.lineJoin = this.line.join || null;
 	}
-
 	this.c.beginPath();
 	callback();
 	if(this.stroke){	
@@ -629,8 +351,6 @@ twoDimension.prototype.drawProcessing = function(callback ,redrawFlag) {
 	this.MC.drawAll();
 	return true;
 };
-
-***********************************************************
 Math.SIN = function (deg) {
 	return Math.sin(deg/360*Math.PI*2);
 }
@@ -640,9 +360,7 @@ Math.COS = function (deg) {
 function polygon (num_of_side ,r ,MC ,canvas , c, config) {
 	this.num_of_side = num_of_side;
 	this.r = r;
-
 	twoDimension.call(this ,MC ,canvas , c, config);
-
 	this.draw = function (ifRedraw){
 		var x = this.offset ? this.offset.x : 0,
 			y = this.offset ? this.offset.y : 0,
@@ -651,11 +369,9 @@ function polygon (num_of_side ,r ,MC ,canvas , c, config) {
 			r = this.r,
 			each = 360 / num,
 			callbackRedraw = {};
-
 		callbackRedraw.callback = null;
 		callbackRedraw.redrawFlag = null;
 		this.callbackRedraw(callbackRedraw ,ifRedraw);
-
 		this.drawProcessing(function(){
 			c.moveTo(x + Math.COS(0) * r , y + Math.SIN(0) * r);
 			for(var i = 1 ; i < num ; i++){
@@ -663,7 +379,6 @@ function polygon (num_of_side ,r ,MC ,canvas , c, config) {
 			}
 			c.closePath();
 		},callbackRedraw.redrawFlag);
-
 		if(callbackRedraw.callback){
 			callbackRedraw.callback.call(this);
 		}
@@ -673,9 +388,7 @@ function polygon (num_of_side ,r ,MC ,canvas , c, config) {
 function rect (width ,height ,MC ,canvas , c, config){
 	this.height = height;
 	this.width = width;
-
 	twoDimension.call(this ,MC ,canvas , c, config);
-
 	this.draw = function (ifRedraw) {
 		var height = this.height,
 			width = this.width,
@@ -683,11 +396,9 @@ function rect (width ,height ,MC ,canvas , c, config){
 			y = this.offset ? this.offset.y : 0,
 			c = this.c,
 			callbackRedraw = {};
-
 		callbackRedraw.callback = null;
 		callbackRedraw.redrawFlag = null;
 		this.callbackRedraw(callbackRedraw ,ifRedraw);
-
 		this.drawProcessing(function(){
 			c.moveTo(x,y);
 			c.lineTo(x+width,y);
@@ -695,12 +406,10 @@ function rect (width ,height ,MC ,canvas , c, config){
 			c.lineTo(x,y+height);
 			c.closePath();
 		},callbackRedraw.redrawFlag);
-
 		if(callbackRedraw.callback){
 			callbackRedraw.callback.call(this);
 		}
 		return this;
-
 	}
 }
 function arc (r ,startAngle ,endAngle ,mode ,MC ,canvas , c, config){
@@ -708,7 +417,6 @@ function arc (r ,startAngle ,endAngle ,mode ,MC ,canvas , c, config){
 	this.startAngle = startAngle,
 	this.endAngle = endAngle,
 	this.mode = mode;
-
 	twoDimension.call(this ,MC ,canvas , c, config);
 }
 arc.prototype.draw = function(ifRedraw) {
@@ -720,27 +428,21 @@ arc.prototype.draw = function(ifRedraw) {
 		endAngle = this.endAngle,
 		c = this.c,
 		callbackRedraw = {};
-
 	callbackRedraw.callback = null;
 	callbackRedraw.redrawFlag = null;
 	this.callbackRedraw(callbackRedraw ,ifRedraw);
-
 	this.drawProcessing(function(){
 		c.arc(x,y,r,startAngle,endAngle,mode);
 	},callbackRedraw.redrawFlag);
-
 	if(callbackRedraw.callback){
 		callbackRedraw.callback.call(this);
 	}
 	return this;
 }
-
 function path (pathData ,isClose ,MC ,canvas , c, config){
 	this.pathData = pathData;
 	this.isClose = isClose;
-
 	twoDimension.call(this ,MC ,canvas , c, config);
-
 }
 path.prototype.draw = function (ifRedraw) {
 	var pathData = this.pathData instanceof Array ? this.pathData : this.pathData(),
@@ -749,11 +451,9 @@ path.prototype.draw = function (ifRedraw) {
 		index = 1,
 		c = this.c,
 		callbackRedraw = {};
-
 	callbackRedraw.callback = null;
 	callbackRedraw.redrawFlag = null;
 	this.callbackRedraw(callbackRedraw ,ifRedraw);
-
 	this.drawProcessing(function() {
 		c.moveTo(pathData[0][0],pathData[0][1]);
 		for( ; index < dataLength ; index ++){
@@ -763,20 +463,16 @@ path.prototype.draw = function (ifRedraw) {
 			c.closePath();
 		}
 	},callbackRedraw.redrawFlag);
-
 	if(callbackRedraw.callback){
 		callbackRedraw.callback.call(this);
 	}
 	return this;
 }
-
 function img (url ,width , height, MC ,canvas , c, config){
 	this.url = url ;
 	this.width = width ;
 	this.height = height ;
-
 	twoDimension.call(this ,MC ,canvas , c, config);
-
 }
 img.prototype.draw = function (ifRedraw) {
 	var url = this.url,
@@ -804,31 +500,25 @@ img.prototype.draw = function (ifRedraw) {
 		_this = this,
 		callback = null,
 		callbackRedraw = {};
-
 	callbackRedraw.callback = null;
 	callbackRedraw.redrawFlag = null;
 	this.callbackRedraw(callbackRedraw ,ifRedraw);
-
 	this.drawProcessing(function(ifRedraw){
 		if(_this.url)
 			c.drawImage(resourse,x,y,width,height);
 	},callbackRedraw.redrawFlag);
-
 	if(callbackRedraw.callback){
 		callbackRedraw.callback.call(this);
 	}
 	return this;
 }
-
 function curve (points ,MC ,canvas , c, config){
 	if(points.length != 6 && points.length != 8){
 		console.error("wrong arguments!!!");
 		return false;
 	}
 	this.points = points ;
-
 	twoDimension.call(this ,MC ,canvas , c, config);
-
 }
 curve.prototype.draw = function(ifRedraw) {
 	var points = this.points,
@@ -836,11 +526,9 @@ curve.prototype.draw = function(ifRedraw) {
 		x = this.offset ? this.offset.x : 0,
 		y = this.offset ? this.offset.y : 0,
 		callbackRedraw = {};
-
 	callbackRedraw.callback = null;
 	callbackRedraw.redrawFlag = null;
 	this.callbackRedraw(callbackRedraw ,ifRedraw);	
-
 	this.drawProcessing(function(){
 		c.moveTo(points[0],points[1]);
 		if(points.length == 6){
@@ -849,13 +537,11 @@ curve.prototype.draw = function(ifRedraw) {
 			c.bezierCurveTo(points[2],points[3],points[4],points[5],points[6],points[7]);
 		}
 	},callbackRedraw.redrawFlag);
-
 	if(callbackRedraw.callback){
 		callbackRedraw.callback.call(this);
 	}
 	return this;
 }
-
 function text (string ,fontSize ,fontFamily ,mode  ,H ,V ,MC ,canvas , c, config){
 	this.string = string;
 	this.fontSize = fontSize;
@@ -863,7 +549,6 @@ function text (string ,fontSize ,fontFamily ,mode  ,H ,V ,MC ,canvas , c, config
 	this.mode = mode;
 	this.V = V;
 	this.H = H;
-
 	twoDimension.call(this ,MC ,canvas , c, config);
 }
 text.prototype.draw = function(ifRedraw) {
@@ -877,24 +562,20 @@ text.prototype.draw = function(ifRedraw) {
 		y = this.offset ? this.offset.y : 0,
 		c = this.c,
 		callbackRedraw = {};
-
 	callbackRedraw.callback = null;
 	callbackRedraw.redrawFlag = null;
 	this.callbackRedraw(callbackRedraw ,ifRedraw);
-
 	this.drawProcessing(function(){
 		c.textAlign = H;
 		c.textBaseline = V;
 		c.font = fontSize +"px "+fontFamily;
 		c.fillText(string ,x ,y);
 	},callbackRedraw.redrawFlag);
-
 	if(callbackRedraw.callback){
 		callbackRedraw.callback.call(this);
 	}
 	return this;
 };
-***********************************************************
 (function(){
 	for(func in twoDimension.prototype){
 		console.log(func);
@@ -910,7 +591,6 @@ text.prototype.draw = function(ifRedraw) {
 function Queue(){
 	this.data = [];
 }
-
 Queue.prototype = {
 	enqueue : function(obj) {
 		this.data.push(obj);
@@ -928,13 +608,11 @@ Queue.prototype = {
 		return this.data.length == 0;
 	}
 }
-
 function Animator(){
 	this.aniQueue = new Queue();
 	this.timer = null;
 	this.started = false;
 }
-
 Animator.prototype = {
 	dequeue : function(){
 		return this.aniQueue.dequeue();
@@ -946,7 +624,6 @@ Animator.prototype = {
 		return this.aniQueue.isEmpty();
 	}
 }
-
 Animator.Fx = function(shape ,options ,attr){
 	this.shape = shape;
 	this.options = options;
@@ -955,9 +632,7 @@ Animator.Fx = function(shape ,options ,attr){
 	this.end = null;
 	this.startTime = null;
 }
-
 Animator.Fx.prototype = {
-
 	begin : function(start ,end){
 		this.start = start;
 		this.end = end;
@@ -965,7 +640,6 @@ Animator.Fx.prototype = {
 		Animator.Fx.fxs.push(this);
 		Animator.Fx.tick();
 	},
-
 	step : function(){
 		var t = new Date().valueOf();
 		var nowPos;
@@ -987,7 +661,6 @@ Animator.Fx.prototype = {
 		}
 		this.update(nowPos, this.attr);
 	},
-
 	update : function(nowPos ,name){
 		var elem = this.shape;
 		if(name == "rotate"){
@@ -998,30 +671,35 @@ Animator.Fx.prototype = {
 		}
 		elem.MC.drawAll();
 	},
-
-	stop : function(){
+	stop : function(MC){
 		var fxs = Animator.Fx.fxs,
-			length = fxs.length
+			length = fxs.length,
+			anis = MC ? MC.anis : null,
+			aniLength = anis ? anis.length : 0;
 		for ( var i = length - 1; i >= 0; i--){
 			if (fxs[i] === this){
 				fxs.splice(i, 1);
+				break;
 			}
 		}
+		if(!!aniLength)
+			for( var i = aniLength - 1 ; i >=0 ; i --){
+				if(anis[i] == this){
+					anis.splice(i,1);
+					break;
+				}
+			}
 	}
 	
 }
-
 Animator.Fx.core = function(state, aniFunc){
-
 	if(aniFunc == "linear"){
 		return state;
 	}
 	if(aniFunc instanceof Array){
 		return Animator.Fx.cubicBezier(state ,aniFunc);
 	}
-
 }
-
 Animator.Fx.cubicBezier = function(x ,func){
 	var p1x = func[0],
 		p1y = func[1],
@@ -1034,26 +712,20 @@ Animator.Fx.cubicBezier = function(x ,func){
 		by = 3 * p2y - 6 * p1y,
 		cy = 3 * p1y,
 		t ;
-
 	t = Animator.Fx.dichotomyGetT(x ,ax ,bx ,cx ,0 ,1);
 	return ((ay * t + by) * t + cy ) * t
-
 }
-
 Number.prototype.equals = function(target){
 	return this < target + 0.005 && this > target - 0.005;
 }
-
 Number.prototype.lessThan = function(target){
 	return this < target - 0.005;
 }
-
 Number.prototype.greaterThan = function(target){
 	return this > target + 0.005;
 }
-
 Animator.Fx.dichotomyGetT = function(x ,ax ,bx ,cx ,leftVal ,rightVal){
-	***********************************************************
+	
 	var mVal = (leftVal + rightVal)/2,
 		lx = Animator.Fx.xTfunc(ax ,bx ,cx ,leftVal);
 		rx = Animator.Fx.xTfunc(ax ,bx ,cx ,rightVal);
@@ -1073,32 +745,21 @@ Animator.Fx.dichotomyGetT = function(x ,ax ,bx ,cx ,leftVal ,rightVal){
 		if(mx.lessThan(x)){
 			return arguments.callee(x ,ax ,bx ,cx ,mVal ,rightVal);
 		}
-
 }
-
 Animator.Fx.xTfunc = function(ax ,bx ,cx ,t){
 	return ((ax * t + bx) * t + cx ) * t;
 }
-
 Animator.Fx.fxs = [];
-
 Animator.Fx.timer = null;
-
 Animator.Fx.stop = function(){
-
 	clearInterval( Animator.Fx.timer );
 	Animator.Fx.timer = null;
-
 };
-
 Animator.Fx.tick = function(){
-
 	if(Animator.Fx.timer){
 		return;
 	}
-
 	var _this = this;
-
 	timer = setInterval(function(){
 		for (var i = 0, c; c = Animator.Fx.fxs[i++];){
 			c.step();
@@ -1107,7 +768,4 @@ Animator.Fx.tick = function(){
 			Animator.Fx.stop();
 		}
 	}, 10);
-
 };
-
-***********************************************************
